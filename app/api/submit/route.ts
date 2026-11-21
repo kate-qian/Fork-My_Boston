@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         //const eventTime = body.timestamp ? new Date(body.timestamp) : new Date();
 
         const query = `
-      INSERT INTO itineraries (id, name, description, location, created_at, 
+      INSERT INTO itineraries (key, name, description, location, created_at, 
       last_edited_at, body, timeframe, stops, published)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, $10)
       RETURNING *;
