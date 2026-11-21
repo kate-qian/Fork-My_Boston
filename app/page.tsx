@@ -33,12 +33,16 @@ export default function HomePage() {
     return (
         <main className="min-h-screen bg-[#F7F5EF] px-6 py-12 text-[#292D27]">
             <div className="mx-auto max-w-5xl">
-
+                
                 {/* Navigation */}
-                <nav className="border-b border-[#E8E3D8] py-2.5">
-                    <div className="mx-auto flex max-w-7xl items-left justify-between">
-                        <a href="/create" className="font-serif text-2xl font-bold tracking-tight transition hover:text-[#C97955]">
-                            create a new itinerary<span className="text-[#C97955]">.</span>
+                <nav className="border-b border-[#E8E3D8] py-3">
+                    <div className="flex items-center justify-start gap-6 px-6">
+                        <a href="/" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
+                            Fork My Boston<span className="text-[#C97955]">.</span>
+                        </a>
+
+                        <a href="/create" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
+                            Create a New Itinerary <span className="text-[#C97955]">.</span>
                         </a>
                     </div>
                 </nav>

@@ -112,10 +112,14 @@ export default function CreatePage() {
         <main className="min-h-screen bg-[#F7F5EF] px-6 py-10">
 
             {/* Navigation */}
-            <nav className="border-b border-[#E8E3D8] px-6 py-5">
-                <div className="mx-auto flex items-center justify-between">
-                    <a href="/" className="font-serif text-2xl font-bold tracking-tight">
-                        create a new itinerary<span className="text-[#C97955]">.</span>
+            <nav className="border-b border-[#E8E3D8] py-3">
+                <div className="mx-auto flex max-w-7xl items-center justify-start gap-8 px-6">
+                    <a href="/" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
+                        Fork My Boston<span className="text-[#C97955]">.</span>
+                    </a>
+
+                    <a href="/create" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
+                        Create a New Itinerary <span className="text-[#C97955]">.</span>
                     </a>
                 </div>
             </nav>
@@ -124,7 +128,7 @@ export default function CreatePage() {
             <div className="mx-auto">
 
                 {/* Header */}
-                <header className="mb-10 w-full border-b border-[#E8E3D8] pb-6">
+                <header className="mb-10 w-full pb-6">
                     <div className="flex w-full justify-center">
                         <h1 className="text-center text-3xl font-bold tracking-tight text-[#292D27]">
                             Create a New Itinerary!
@@ -132,8 +136,7 @@ export default function CreatePage() {
                     </div>
 
                     <p className="mt-2 w-full text-center text-sm text-[#929187]">
-                        Put together your favorite places and share your
-                        perfect Boston day.
+                        Put together your favorite places and share your perfect Boston day!
                     </p>
                 </header>
                 
@@ -142,20 +145,20 @@ export default function CreatePage() {
                     {/* Basic itinerary information */}
                     <section className="rounded-2xl border border-[#E8E3D8] bg-white p-6 shadow-sm">
                     <h2 className="mb-5 text-lg font-semibold text-[#292D27]">
-                        The basics
+                        General Information
                     </h2>
 
                     <div className="space-y-5">
                         <div>
                         <label className="mb-2 block text-sm font-medium text-[#55594F]">
-                            Itinerary title
+                            Title
                         </label>
 
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="e.g. A perfect Saturday in Boston"
+                            placeholder="ex. Thanksgiving Weekend Travel Trot"
                             className="w-full rounded-lg border border-[#E8E3D8] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#C97955]"
                         />
                         </div>
@@ -168,7 +171,7 @@ export default function CreatePage() {
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Tell people a little about your itinerary..."
+                            placeholder="Tell us about your plans!"
                             rows={3}
                             className="w-full resize-none rounded-lg border border-[#E8E3D8] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#C97955]"
                         />
@@ -182,11 +185,11 @@ export default function CreatePage() {
                     <div className="mb-6 flex items-center justify-between">
                         <div>
                         <h2 className="text-lg font-semibold text-[#292D27]">
-                            Your stops
+                            Your Stops
                         </h2>
 
                         <p className="mt-1 text-sm text-[#929187]">
-                            Add the places you want to visit, in order.
+                            Add the places you want to visit!
                         </p>
                         </div>
 
@@ -272,7 +275,7 @@ export default function CreatePage() {
                                     : "bg-[#F0EDE7] text-[#55594F] hover:bg-[#E8E3D8]"
                                 }`}
                             >
-                                Search places
+                                Search Places
                             </button>
 
                             <button
@@ -286,7 +289,7 @@ export default function CreatePage() {
                                     : "bg-[#F0EDE7] text-[#55594F] hover:bg-[#E8E3D8]"
                                 }`}
                             >
-                                Enter manually
+                                Enter Manually
                             </button>
                             </div>
 
@@ -296,7 +299,7 @@ export default function CreatePage() {
                             {stop.input_mode === "search" ? (
                                 <div>
                                 <label className="mb-2 block text-sm font-medium text-[#55594F]">
-                                    Find a place
+                                    Search for a place
                                 </label>
 
                                 <PlaceSearch
@@ -339,7 +342,7 @@ export default function CreatePage() {
                                         e.target.value
                                         )
                                     }
-                                    placeholder="e.g. Boston Public Garden"
+                                    placeholder="ex. Mecha Noodle Bar"
                                     className="w-full rounded-lg border border-[#E8E3D8] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#C97955]"
                                     />
                                 </div>

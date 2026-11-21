@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { DM_Serif_Display, DM_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const headingFont = DM_Serif_Display({
+const headingFont = DM_Sans({
     variable: "--font-heading",
     subsets: ["latin"],
     weight: "400",

@@ -98,7 +98,7 @@ export default function PlaceSearch({ onSelect }: PlaceSearchProps) {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for a place in Boston..."
+        placeholder="ex. Mecha Noodle Bar"
         className="w-full rounded-lg border border-[#E8E3D8] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#C97955]"
       />
 
