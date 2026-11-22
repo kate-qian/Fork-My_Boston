@@ -322,25 +322,36 @@ export default function CreatePage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#F7F5EF] px-6 py-10">
-
-            {/* Navigation */}
-            <NavBar />
+        <main className="min-h-screen bg-[#FAF9F6] px-8 py-12">
 
             {/* Page content */}
-            <div className="mx-auto">
+            <div className="mx-auto max-w-5xl">
 
-                {/* Header */}
-                <header className="mb-10 w-full pb-6">
-                    <div className="flex w-full justify-center">
-                        <h1 className="font-serif text-4xl text-center font-bold tracking-tight text-[#292D27] py-3">
-                            Create a New Itinerary!
-                        </h1>
+                {/* Navigation */}
+                <NavBar />
+                
+                {/* Welcome section */}
+                <header className="mb-12">
+                    <div className="mx-auto flex max-w-6xl justify-between gap-8 pt-4">
+                    {/* Left: Welcome text */}
+                        <div className="flex flex-7 flex-col items-start">
+                            <h1 className="font-serif pt-20 text-bold text-5xl">
+                                Create a New Itinerary!
+                            </h1>
+
+                            <p className="text-lg pb-20 text-[#34483B]">
+                                Plan your Next Boston Adventure.
+                            </p>
+                        </div>
+
+                        {/* Right: Image */}
+                        <div className="flex-3 pt-10 pr-16">
+                            <img
+                                src="../bostonhackslobster.png"
+                                className="w-full max-w-sm h-auto"
+                            />
+                        </div>
                     </div>
-
-                    <p className="mt-2 w-full text-center text-lg text-[#929187]">
-                        Put together your favorite places and share your perfect Boston day!
-                    </p>
                 </header>
 
                 <div className="space-y-8">

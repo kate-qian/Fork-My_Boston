@@ -14,17 +14,17 @@ export default function NavBar() {
             <div className="flex items-center justify-between">
 
                 {/* Left side */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-8">
                     <a
                         href="/"
-                        className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]"
+                        className="mb-3 text-sm font-semibold uppercase tracking-widest text-[#C97955] hover:text-[#C97955]"
                     >
-                        Fork My Boston<span className="text-[#C97955]">.</span>
+                        Fork My Boston<span className="text-[#C97955]"></span>
                     </a>
 
                     <a
                         href="/create"
-                        className="font-serif text-lg font-semibold transition hover:text-[#C97955]"
+                        className="mb-3 text-sm font-semibold uppercase tracking-widest text-[#C97955] hover:text-[#C97955]"
                     >
                         Create an Itinerary<span className="text-[#C97955]">.</span>
                     </a>

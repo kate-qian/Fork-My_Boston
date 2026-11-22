@@ -1,4 +1,4 @@
-//"use client";
+// "use client";
 
 import pool from "../server/db";
 import ItineraryVisitor, { ItineraryCardData, } from "@/components/ItineraryVisitor";
@@ -84,16 +84,27 @@ export default async function HomePage() {
                 <NavBar />
 
                 {/* Welcome section */}
-                <header className="mb-12 py-2">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[#C97955]">
-                        Fork My Boston
-                    </p>
+                <header className="mb-12">
+                    <div className="mx-auto flex max-w-6xl justify-between gap-8 pt-4">
+                    {/* Left: Welcome text */}
+                        <div className="flex flex-7 flex-col items-start">
+                            <h1 className="font-serif pt-20 text-bold text-5xl">
+                                Welcome to Fork My Boston!
+                            </h1>
 
-                    <h1 className="font-serif text-5xl">Welcome to Fork My Boston!</h1>
+                            <p className="text-lg pb-20 text-[#34483B]">
+                                Discover and share your Boston adventures.
+                            </p>
+                        </div>
 
-                    <p className="mt-4 text-xl text-[#77796F]">
-                        Discover and share Boston adventures.
-                    </p>
+                        {/* Right: Image */}
+                        <div className="flex-3 pt-10 pr-16">
+                            <img
+                                src="../bostonhackslobster.png"
+                                className="w-full max-w-sm h-auto"
+                            />
+                        </div>
+                    </div>
                 </header>
 
                 {/* Interactive search & database-backed itinerary cards */}
