@@ -30,32 +30,6 @@ function getLegKey(fromStopId: string, toStopId: string) {
 export default function CreatePage() {
     const { user_logged_in, isGuest } = useAuth();
 
-    // Example 1: Block guests from viewing or submitting a page
-    if (isGuest) {
-        return (
-            <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6] p-6">
-                <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
-                    <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
-                    <p className="mt-2 text-gray-500">
-                        Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
-                    </p>
-                    <a
-                        href="/login"
-                        className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
-                    >
-                        Log In
-                    </a>
-                    <a className="text-med font-semibold text-[#77796F] px-2">
-                        |
-                    </a>
-                    <a href="/" className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
-                    >
-                        Back
-                    </a>
-                </div>
-            </main>
-        );
-    }
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
@@ -77,6 +51,7 @@ export default function CreatePage() {
     const [saveStatus, setSaveStatus] = useState("");
     const [routeMessage, setRouteMessage] = useState("");
     const [legModes, setLegModes] = useState<Record<string, TravelMode>>({});
+
 
     async function handlePublish() {
         // if (!title.trim()) {
@@ -104,6 +79,7 @@ export default function CreatePage() {
                 ...stop,
                 itinerary_id: itineraryId,
             })),
+            owner_id: user_logged_in
         };
 
         //saveGuestItinerary(payload);
@@ -321,19 +297,45 @@ export default function CreatePage() {
         });
     };
 
+    // Example 1: Block guests from viewing or submitting a page
+    if (isGuest) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6] p-6">
+                <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+                    <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
+                    <p className="mt-2 text-gray-500">
+                        Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
+                    </p>
+                    <a
+                        href="/login"
+                        className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                    >
+                        Log In
+                    </a>
+                    <a className="text-med font-semibold text-[#77796F] px-2">
+                        |
+                    </a>
+                    <a href="/" className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                    >
+                        Back
+                    </a>
+                </div>
+            </main>
+        );
+    }
     return (
-        <main className="min-h-screen bg-[#FAF9F6] px-8 py-12">
+        <main className="min-h-screen bg-[#F7F5EF] px-8 py-12">
 
             {/* Page content */}
             <div className="mx-auto max-w-5xl">
 
                 {/* Navigation */}
                 <NavBar />
-                
+
                 {/* Welcome section */}
                 <header className="mb-12">
                     <div className="mx-auto flex max-w-6xl justify-between gap-8 pt-4">
-                    {/* Left: Welcome text */}
+                        {/* Left: Welcome text */}
                         <div className="flex flex-7 flex-col items-start">
                             <h1 className="font-serif pt-20 text-bold text-5xl">
                                 Create a New Itinerary!
@@ -412,7 +414,7 @@ export default function CreatePage() {
                             </span>
                         </div>
 
-                                                {/* Interactive map */}
+                        {/* Interactive map */}
                         <div className="mb-4">
                             <ItineraryMap
                                 stops={stops.map((stop) => ({
