@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "../app/context/AuthContext";
 
 export default function NavBar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    //const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { user_logged_in, isGuest } = useAuth();
+    const { login } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -28,7 +31,7 @@ export default function NavBar() {
                 </div>
 
                 {/* Right side */}
-                {!isLoggedIn ? (
+                {isGuest ? (
                     <div className="flex items-center gap-4">
                         <a
                             href="/login"
@@ -84,7 +87,8 @@ export default function NavBar() {
 
                                 <button
                                     onClick={() => {
-                                        setIsLoggedIn(false);
+                                        // Updates global user_logged_in state, localStorage, and cookie
+                                        login("0");
                                         setMenuOpen(false);
                                     }}
                                     className="block w-full px-4 py-2 text-left text-sm text-[#C97955] hover:bg-[#F7F5EF]"

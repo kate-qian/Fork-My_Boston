@@ -39,6 +39,13 @@ export default function CreatePage() {
                     >
                         Log In
                     </a>
+                    <a className="text-med font-semibold text-[#77796F] px-2">
+                        |
+                    </a>
+                    <a href="/" className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                    >
+                        Back
+                    </a>
                 </div>
             </main>
         );

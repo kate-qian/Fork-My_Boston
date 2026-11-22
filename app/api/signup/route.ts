@@ -7,6 +7,7 @@ interface FormPayload {
     username: string;
     user_email: string;
     created_at: string;
+    password: string;
 }
 
 export async function POST(request: Request) {
@@ -14,12 +15,12 @@ export async function POST(request: Request) {
         const body: FormPayload = await request.json();
 
         const query = `
-      INSERT INTO users (user_id, username, user_email, created_at)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO users (user_id, username, user_email, created_at, password)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
         const values = [body.user_id, body.username, body.user_email,
-        body.created_at,];
+        body.created_at, body.password];
 
         const result = await pool.query(query, values);
 
