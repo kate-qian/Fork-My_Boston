@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getGuestDraft, saveGuestDraft, saveGuestItinerary, clearGuestDraft, } from "@/lib/storage";
 import PlaceSearch, { type SelectedPlace, } from "../../components/PlaceSearch";
 import ItineraryMap from "../../components/ItineraryMap";
+import NavBar from "../../components/NavBar";
 
 type Stop = {
     id: string;
@@ -51,6 +53,36 @@ export default function CreatePage() {
         }]);
     };
 
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [saveStatus, setSaveStatus] = useState("");
+
+    // Recover an unfinished draft when the page loads
+    useEffect(() => {
+        const draft = getGuestDraft();
+
+        if (draft) {
+            setTitle(draft.title);
+            setDescription(draft.description);
+            setStops(draft.stops);
+        }
+
+        setIsLoaded(true);
+    }, []);
+
+    // Automatically save whenever the user makes changes
+    useEffect(() => {
+        if (!isLoaded) return;
+
+        saveGuestDraft({
+            title,
+            description,
+            stops,
+            updated_at: new Date().toISOString(),
+        });
+
+        setSaveStatus("Saved on this device");
+    }, [title, description, stops, isLoaded]);
+
     const removeStop = (id: string) => {setStops((prevStops) =>
         prevStops.filter((stop) => stop.id !== id).map((stop, index) => 
         ({...stop, position_in_itinerary: index + 1, })));
@@ -97,32 +129,38 @@ export default function CreatePage() {
         });
     };
 
-    // TODO: replace this placeholder at some point
     const handlePublish = () => {
-        console.log({
-            title,
-            description,
-            stops,
-        });
+        if (!title.trim()) return;
 
-        alert("Your itinerary is ready to publish!");
+        const now = new Date().toISOString();
+
+        const itinerary = {
+            id: crypto.randomUUID(),
+            title: title.trim(),
+            description,
+            stops: stops.map((stop, index) => ({
+                ...stop,
+                position_in_itinerary: index + 1,
+            })),
+            created_at: now,
+            updated_at: now,
+            published: false,
+            owner_id: null,
+        };
+
+        saveGuestItinerary(itinerary);
+        clearGuestDraft();
+
+        setSaveStatus("Itinerary saved!");
+
+        alert("Your itinerary has been saved on this device!");
     };
 
     return (
         <main className="min-h-screen bg-[#F7F5EF] px-6 py-10">
 
             {/* Navigation */}
-            <nav className="border-b border-[#E8E3D8] py-3">
-                <div className="mx-auto flex max-w-7xl items-center justify-start gap-8 px-6">
-                    <a href="/" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
-                        Fork My Boston<span className="text-[#C97955]">.</span>
-                    </a>
-
-                    <a href="/create" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
-                        Create a New Itinerary <span className="text-[#C97955]">.</span>
-                    </a>
-                </div>
-            </nav>
+            <NavBar />
 
             {/* Page content */}
             <div className="mx-auto">
@@ -429,16 +467,22 @@ export default function CreatePage() {
                     </button>
                     </section>
 
-                    {/* Publish */}
-                    <div className="flex justify-end">
-                    <button
-                        type="button"
-                        onClick={handlePublish}
-                        disabled={!title.trim()}
-                        className="rounded-xl bg-[#C97955] px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#B66B48] disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        Publish itinerary →
-                    </button>
+                    {/* Save */}
+                    <div className="flex flex-col items-end gap-2">
+                        {saveStatus && (
+                            <p className="text-sm text-[#71816E]">
+                                {saveStatus}
+                            </p>
+                        )}
+
+                        <button
+                            type="button"
+                            onClick={handlePublish}
+                            disabled={!title.trim()}
+                            className="rounded-xl bg-[#C97955] px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#B66B48] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            Save itinerary
+                        </button>
                     </div>
                 </div>
             </div>

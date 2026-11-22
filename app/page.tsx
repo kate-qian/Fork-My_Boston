@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getGuestItineraries, type GuestItinerary, } from "@/lib/storage";
+import NavBar from "../components/NavBar";
 
 export default function HomePage() {
     const [searchQuery, setSearchQuery] = useState("");
+
+    const [savedItineraries, setSavedItineraries] = useState<GuestItinerary[]>([]);
+
+    useEffect(() => {setSavedItineraries(getGuestItineraries());}, []);
 
     const itineraries = [{
         id: "1",
@@ -19,7 +25,20 @@ export default function HomePage() {
         stops: ["Mike's Pastry", "Regina Pizzeria"],
     }];
 
-    const filteredItineraries = itineraries.filter((itinerary) => {
+    const allItineraries = [
+        ...itineraries,
+        ...savedItineraries.map((itinerary) => ({
+            id: itinerary.id,
+            title: itinerary.title,
+            description: itinerary.description,
+            category: "Your Saved Itinerary",
+            stops: itinerary.stops
+                .map((stop) => stop.name)
+                .filter(Boolean),
+        })),
+    ];
+
+    const filteredItineraries = allItineraries.filter((itinerary) => {
         const searchableText = [
             itinerary.title,
             itinerary.description,
@@ -35,17 +54,7 @@ export default function HomePage() {
             <div className="mx-auto max-w-5xl">
                 
                 {/* Navigation */}
-                <nav className="border-b border-[#E8E3D8] py-3">
-                    <div className="flex items-center justify-start gap-6 px-6">
-                        <a href="/" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
-                            Fork My Boston<span className="text-[#C97955]">.</span>
-                        </a>
-
-                        <a href="/create" className="font-serif text-lg font-bold tracking-tight transition hover:text-[#C97955]">
-                            Create a New Itinerary <span className="text-[#C97955]">.</span>
-                        </a>
-                    </div>
-                </nav>
+                <NavBar />
 
                 {/* Welcome section */}
                 <header className="mb-12 py-2">
