@@ -97,7 +97,7 @@ export default async function ItineraryDetailPage({
 
                 {/* Itinerary header */}
                 <header className="mb-10">
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3 pt-2 pb-1">
                         <span className="text-xs font-semibold uppercase tracking-widest text-[#C97955]">
                             {itinerary.location}
                         </span>
