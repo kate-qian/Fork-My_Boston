@@ -33,6 +33,12 @@ export default function CreatePage() {
                     <p className="mt-2 text-gray-500">
                         Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
                     </p>
+                    <a
+                        href="/login"
+                        className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                    >
+                        Log In
+                    </a>
                 </div>
             </main>
         );
@@ -355,6 +361,7 @@ export default function CreatePage() {
                                     latitude: stop.latitude,
                                     longitude: stop.longitude,
                                 }))}
+                                onAddStop={addStop}
                             />
                         </div>
 
