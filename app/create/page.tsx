@@ -28,7 +28,7 @@ function getLegKey(fromStopId: string, toStopId: string) {
 }
 
 export default function CreatePage() {
-    // const { user_logged_in, isGuest } = useAuth();
+    const { user_logged_in, isGuest } = useAuth();
 
     // Example 1: Block guests from viewing or submitting a page
     if (isGuest) {
