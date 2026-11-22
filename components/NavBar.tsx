@@ -8,7 +8,7 @@ export default function NavBar() {
 
     return (
         <nav className="border-b border-[#E8E3D8] py-3">
-            <div className="flex items-center justify-between px-6">
+            <div className="flex items-center justify-between">
 
                 {/* Left side */}
                 <div className="flex items-center gap-6">
@@ -21,9 +21,9 @@ export default function NavBar() {
 
                     <a
                         href="/create"
-                        className="font-serif text-sm font-semibold transition hover:text-[#C97955]"
+                        className="font-serif text-lg font-semibold transition hover:text-[#C97955]"
                     >
-                        Create an Itinerary
+                        Create an Itinerary<span className="text-[#C97955]">.</span>
                     </a>
                 </div>
 
@@ -32,14 +32,14 @@ export default function NavBar() {
                     <div className="flex items-center gap-4">
                         <a
                             href="/login"
-                            className="text-sm font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                            className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
                         >
                             Log In
                         </a>
 
                         <a
                             href="/signup"
-                            className="rounded-full bg-[#C97955] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#A85D3F]"
+                            className="rounded-full bg-[#C97955] px-5 py-2.5 text-med font-semibold text-white transition hover:bg-[#A85D3F]"
                         >
                             Sign Up
                         </a>
