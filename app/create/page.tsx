@@ -7,6 +7,7 @@ import ItineraryMap from "../../components/ItineraryMap";
 import NavBar from "../../components/NavBar";
 import { useAuth } from "../context/AuthContext";
 import { optimizeStopOrder } from "@/lib/planning/route-optimization";
+import DiscoveryPanel from "@/components/DiscoveryPanel";
 
 
 type Stop = {
@@ -296,14 +297,59 @@ export default function CreatePage() {
     };
 
     const selectPlace = (id: string, place: SelectedPlace) => {
-        setStops((prevStops) => prevStops.map((stop) => stop.id === id ? {
-            ...stop,
-            name: place.name,
-            location: place.address,
-            place_id: place.placeId,
-            latitude: place.latitude,
-            longitude: place.longitude,
-        } : stop));
+            setStops((prevStops) => prevStops.map((stop) => stop.id === id ? {
+                ...stop,
+                name: place.name,
+                location: place.address,
+                place_id: place.placeId,
+                latitude: place.latitude,
+                longitude: place.longitude,
+            } : stop));
+        };
+
+        const addDiscoveredPlace = (place: SelectedPlace, reason: string) => {
+        setStops((previousStops) => {
+            // Fill the initial empty stop instead of creating a blank extra card.
+            const emptyIndex = previousStops.findIndex(
+                (stop) => !stop.name.trim() && !stop.location.trim()
+            );
+
+            const newStop: Stop = {
+                id: crypto.randomUUID(),
+                itinerary_id: "",
+                name: place.name,
+                description: reason,
+                location: place.address,
+                latitude: place.latitude,
+                longitude: place.longitude,
+                place_id: place.placeId,
+                time: "",
+                position_in_itinerary: 1,
+                input_mode: "search",
+            };
+
+            if (emptyIndex !== -1) {
+                return previousStops.map((stop, index) =>
+                    index === emptyIndex
+                        ? {
+                            ...newStop,
+                            id: stop.id,
+                            position_in_itinerary: index + 1,
+                        }
+                        : stop
+                );
+            }
+
+            return [
+                ...previousStops,
+                {
+                    ...newStop,
+                    position_in_itinerary: previousStops.length + 1,
+                },
+            ];
+        });
+
+        setRouteMessage("");
     };
 
     const moveStop = (index: number, direction: -1 | 1) => {
@@ -392,6 +438,8 @@ export default function CreatePage() {
                             </div>
                         </div>
                     </section>
+
+                    <DiscoveryPanel onAddPlace={addDiscoveredPlace} />
 
                     {/* Stops and map */}
                     <section className="rounded-2xl border border-[#E8E3D8] bg-white p-6 shadow-sm">
