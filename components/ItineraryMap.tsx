@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import {
-    Map as MapLibreMap,
+    Map as MapLibreGL,
     Marker,
     Popup,
     NavigationControl,
@@ -26,18 +26,25 @@ type ItineraryMapProps = {
 
 export default function ItineraryMap({ stops }: ItineraryMapProps) {
     const mapContainer = useRef<HTMLDivElement | null>(null);
-    const mapRef = useRef<MapLibreMap | null>(null);
+    const mapRef = useRef<MapLibreGL | null>(null);
     const markersRef = useRef<Marker[]>([]);
 
     // Initialize map
     useEffect(() => {
         if (!mapContainer.current || mapRef.current) return;
 
-        const map = new MapLibreMap({
-            container: mapContainer.current,
-            style: "https://tiles.openfreemap.org/styles/liberty",
+        const map = new MapLibreGL({
+            container: mapContainer.current!,
+            style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`,
             center: [-71.0589, 42.3601],
             zoom: 12,
+            minZoom: 10,
+            maxZoom: 18,
+
+            maxBounds: [
+                [-71.25, 42.20], // Southwest
+                [-70.90, 42.45], // Northeast
+            ],
         });
 
         mapRef.current = map;
