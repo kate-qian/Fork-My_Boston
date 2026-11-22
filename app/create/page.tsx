@@ -5,6 +5,7 @@ import { getGuestDraft, saveGuestDraft, saveGuestItinerary, clearGuestDraft, } f
 import PlaceSearch, { type SelectedPlace, } from "../../components/PlaceSearch";
 import ItineraryMap from "../../components/ItineraryMap";
 import NavBar from "../../components/NavBar";
+import { useAuth } from "../context/AuthContext";
 
 type Stop = {
     id: string;
@@ -21,6 +22,27 @@ type Stop = {
 };
 
 export default function CreatePage() {
+    const { user_logged_in, isGuest } = useAuth();
+
+    // Example 1: Block guests from viewing or submitting a page
+    if (isGuest) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6] p-6">
+                <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+                    <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
+                    <p className="mt-2 text-gray-500">
+                        Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
+                    </p>
+                    <a
+                        href="/login"
+                        className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+                    >
+                        Log In
+                    </a>
+                </div>
+            </main>
+        );
+    }
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
 
 const headingFont = DM_Sans({
@@ -26,7 +27,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${headingFont.variable} ${bodyFont.variable}`}>
-            {children}
+                <AuthProvider>{children}</AuthProvider>
             </body>
         </html>
     );

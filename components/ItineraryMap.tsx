@@ -216,7 +216,7 @@ function createBusinessPopup(
     }).setDOMContent(container);
 }
 
-export default function ItineraryMap({stops, onAddStop}: ItineraryMapProps) {
+export default function ItineraryMap({ stops, onAddStop }: ItineraryMapProps) {
     const mapContainer = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<MapLibreGL | null>(null);
     const markersRef = useRef<Marker[]>([]);
