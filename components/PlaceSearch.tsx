@@ -44,8 +44,11 @@ export default function PlaceSearch({ onSelect }: PlaceSearchProps) {
           text: query,
           format: "json",
           limit: "5",
-          filter: "countrycode:us",
+
+          filter: "rect:-71.25,42.20,-70.90,42.45",
+
           bias: "proximity:-71.0589,42.3601",
+
           apiKey: process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY ?? "",
         });
 
