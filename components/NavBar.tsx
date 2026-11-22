@@ -27,7 +27,7 @@ export default function NavBar() {
                         href="/create"
                         className="mb-3 text-sm font-semibold uppercase tracking-widest text-[#C97955] hover:text-[#C97955]"
                     >
-                        Create an Itinerary<span className="text-[#C97955]">.</span>
+                        Create an Itinerary<span className="text-[#C97955]"></span>
                     </a>
                 </div>
 
