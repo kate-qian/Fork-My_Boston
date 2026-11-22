@@ -118,33 +118,6 @@ export default function CreatePage() {
         }
     }
 
-    // const handlePublish = () => {
-    //     if (!title.trim()) return;
-
-    //     const now = new Date().toISOString();
-
-    //     const itinerary = {
-    //         id: crypto.randomUUID(),
-    //         title: title.trim(),
-    //         description,
-    //         stops: stops.map((stop, index) => ({
-    //             ...stop,
-    //             position_in_itinerary: index + 1,
-    //         })),
-    //         created_at: now,
-    //         updated_at: now,
-    //         published: false,
-    //         owner_id: null,
-    //     };
-
-    //     saveGuestItinerary(itinerary);
-    //     clearGuestDraft();
-
-    //     setSaveStatus("Itinerary saved!");
-
-    //     alert("Your itinerary has been saved on this device!");
-    // };
-
     const addStop = () => {
         setStops((prevStops) => [...prevStops, {
             id: crypto.randomUUID(),
@@ -273,17 +246,17 @@ export default function CreatePage() {
     };
 
     const selectPlace = (id: string, place: SelectedPlace) => {
-            setStops((prevStops) => prevStops.map((stop) => stop.id === id ? {
-                ...stop,
-                name: place.name,
-                location: place.address,
-                place_id: place.placeId,
-                latitude: place.latitude,
-                longitude: place.longitude,
-            } : stop));
-        };
+        setStops((prevStops) => prevStops.map((stop) => stop.id === id ? {
+            ...stop,
+            name: place.name,
+            location: place.address,
+            place_id: place.placeId,
+            latitude: place.latitude,
+            longitude: place.longitude,
+        } : stop));
+    };
 
-        const addDiscoveredPlace = (place: SelectedPlace, reason: string) => {
+    const addDiscoveredPlace = (place: SelectedPlace, reason: string) => {
         setStops((previousStops) => {
             // Fill the initial empty stop instead of creating a blank extra card.
             const emptyIndex = previousStops.findIndex(
@@ -350,7 +323,7 @@ export default function CreatePage() {
                 <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
                     <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
                     <p className="mt-2 text-gray-500">
-                        Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
+                        Guests cannot publish itineraries. Please log in first.
                     </p>
                     <a
                         href="/login"
@@ -387,7 +360,7 @@ export default function CreatePage() {
                                 Create a New Itinerary!
                             </h1>
 
-                            <p className="text-lg pb-20 text-[#34483B]">
+                            <p className="text-lg pb-20 text-[#34483B] px-1.5">
                                 Plan your Next Boston Adventure.
                             </p>
                         </div>

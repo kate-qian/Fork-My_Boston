@@ -11,7 +11,7 @@ export default function NavBar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <nav className="border-b border-[#E8E3D8] py-3">
+        <nav className="border-b border-[#E8E3D8] pt-3 pb-1">
             <div className="flex items-center justify-between">
 
                 {/* Left side */}
@@ -49,7 +49,7 @@ export default function NavBar() {
                         </a>
                     </div>
                 ) : (
-                    <div className="relative">
+                    <div className="relative pb-2">
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
                             className="flex items-center gap-2"

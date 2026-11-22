@@ -93,7 +93,7 @@ async function getUserPinnedItineraries(
 
     return {
         userId: user.user_id,
-        displayName: user.email ? user.email.split("@")[0] : "Explorer",
+        displayName: user.user_email ? user.user_email.split("@")[0] : "Explorer",
         itineraries,
     };
 }
@@ -119,11 +119,11 @@ export default async function UserPinnedItinerariesPage({
 
                 {/* User profile header */}
                 <header className="mb-12">
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#C97955]">
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#C97955] pt-2 pb-1 ">
                         Pinned Collection
                     </p>
 
-                    <h1 className="font-serif text-4xl md:text-5xl">
+                    <h1 className="font-serif text-4xl capitalize md:text-5xl">
                         {data.displayName}&apos;s Pinned Itineraries
                     </h1>
 

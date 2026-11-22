@@ -110,7 +110,7 @@ export default function SignupPage() {
 
                 <a
                     href="/login"
-                    className="mt-4 text-center pt-10 text-sm text-[#C97955] hover:text-[#A85D3F]"
+                    className="mt-4 text-center pt-10 pl-2 text-sm text-[#C97955] hover:text-[#A85D3F]"
                 >
                     Already have an account? Log In
                 </a>
