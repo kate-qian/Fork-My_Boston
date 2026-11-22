@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import pool from "../../../server/db";
+import ItineraryActions from "../../../components/ItineraryActions";
+import NavBar from "../../../components/NavBar";
 
 // Ensures fresh data from Tiger Data on every visit
 export const dynamic = "force-dynamic";
@@ -17,6 +19,7 @@ type ItineraryDetail = {
     title: string;
     description: string;
     location: string;
+    ownerId: string | null;
     createdAt: string | null;
     stops: Stop[];
 };
@@ -29,6 +32,7 @@ async function getItineraryById(key: string): Promise<ItineraryDetail | null> {
       name AS title,
       description,
       location,
+      owner_id,
       stops,
       created_at
     FROM itineraries
@@ -56,6 +60,7 @@ async function getItineraryById(key: string): Promise<ItineraryDetail | null> {
         title: row.title || "Untitled Itinerary",
         description: row.description || "",
         location: row.location || "Boston, MA",
+        ownerId: row.owner_id ? String(row.owner_id) : null,
         createdAt: row.created_at
             ? new Date(row.created_at).toLocaleDateString("en-US", {
                 month: "long",
@@ -87,14 +92,8 @@ export default async function ItineraryDetailPage({
         <main className="min-h-screen bg-[#F7F5EF] px-6 py-12 text-[#292D27]">
             <div className="mx-auto max-w-3xl">
                 {/* Top navigation */}
-                <nav className="mb-10 border-b border-[#E8E3D8] pb-4">
-                    <a
-                        href="/"
-                        className="text-sm font-semibold text-[#77796F] transition hover:text-[#C97955]"
-                    >
-                        ← Back to all itineraries
-                    </a>
-                </nav>
+                <NavBar />
+
 
                 {/* Itinerary header */}
                 <header className="mb-10">
@@ -118,6 +117,12 @@ export default async function ItineraryDetailPage({
                             {itinerary.description}
                         </p>
                     )}
+
+                    {/* Pin, Fork, and Owner-only Edit buttons */}
+                    <ItineraryActions
+                        itineraryKey={itinerary.key}
+                        ownerId={itinerary.ownerId}
+                    />
                 </header>
 
                 {/* Stops timeline */}
@@ -174,6 +179,6 @@ export default async function ItineraryDetailPage({
                     )}
                 </section>
             </div>
-        </main>
+        </main >
     );
 }
