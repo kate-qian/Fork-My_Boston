@@ -1,3 +1,10 @@
+export type TravelMode =
+    | "automatic"
+    | "walking"
+    | "driving"
+    | "cycling"
+    | "transit";
+
 export type GuestStop = {
     id: string;
     itinerary_id: string;
@@ -27,6 +34,7 @@ export type GuestDraft = {
     title: string;
     description: string;
     stops: GuestStop[];
+    legModes?: Record<string, TravelMode>;
     updated_at: string;
 };
 

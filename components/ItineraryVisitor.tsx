@@ -85,7 +85,7 @@ export default function ItineraryVisitor({
                                 </p>
 
                                 <a
-                                    href={`/itineraries/${itinerary.id}`}
+                                    href={`/itineraries/${itinerary.key}`}
                                     className="mt-5 inline-block text-sm font-semibold text-[#C97955] hover:text-[#A85D3F]"
                                 >
                                     View itinerary →

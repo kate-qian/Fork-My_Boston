@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getGuestDraft, saveGuestDraft, saveGuestItinerary, clearGuestDraft, } from "@/lib/storage";
+import { getGuestDraft, saveGuestDraft, saveGuestItinerary, clearGuestDraft, type TravelMode, } from "@/lib/storage";
 import PlaceSearch, { type SelectedPlace, } from "../../components/PlaceSearch";
 import ItineraryMap from "../../components/ItineraryMap";
 import NavBar from "../../components/NavBar";
 import { useAuth } from "../context/AuthContext";
+import { optimizeStopOrder } from "@/lib/planning/route-optimization";
+
 
 type Stop = {
     id: string;
@@ -21,28 +23,32 @@ type Stop = {
     input_mode: "search" | "manual";
 };
 
+function getLegKey(fromStopId: string, toStopId: string) {
+    return `${fromStopId}->${toStopId}`;
+}
+
 export default function CreatePage() {
-    const { user_logged_in, isGuest } = useAuth();
+    // const { user_logged_in, isGuest } = useAuth();
 
     // Example 1: Block guests from viewing or submitting a page
-    if (isGuest) {
-        return (
-            <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6] p-6">
-                <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
-                    <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
-                    <p className="mt-2 text-gray-500">
-                        Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
-                    </p>
-                    <a
-                        href="/login"
-                        className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
-                    >
-                        Log In
-                    </a>
-                </div>
-            </main>
-        );
-    }
+    // if (isGuest) {
+    //     return (
+    //         <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6] p-6">
+    //             <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+    //                 <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
+    //                 <p className="mt-2 text-gray-500">
+    //                     Guests (ID: {user_logged_in}) cannot publish itineraries. Please log in first.
+    //                 </p>
+    //                 <a
+    //                     href="/login"
+    //                     className="text-med font-semibold text-[#77796F] transition hover:text-[#C97955]"
+    //                 >
+    //                     Log In
+    //                 </a>
+    //             </div>
+    //         </main>
+    //     );
+    // }
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
@@ -62,6 +68,8 @@ export default function CreatePage() {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [saveStatus, setSaveStatus] = useState("");
+    const [routeMessage, setRouteMessage] = useState("");
+    const [legModes, setLegModes] = useState<Record<string, TravelMode>>({});
 
     async function handlePublish() {
         // if (!title.trim()) {
@@ -193,6 +201,41 @@ export default function CreatePage() {
         ]);
     };
 
+    const handleOptimizeRoute = () => {
+        const locatedCount = stops.filter(
+            (stop) =>
+                stop.latitude !== null &&
+                stop.longitude !== null
+        ).length;
+
+        if (locatedCount < 3) {
+            setRouteMessage(
+                "Add at least three located stops to optimize your route."
+            );
+            return;
+        }
+
+        const result = optimizeStopOrder(stops);
+
+        if (!result.improved) {
+            setRouteMessage(
+                `Your current route is already efficient! (${result.originalDistanceKm.toFixed(1)} km)`
+            );
+            return;
+        }
+
+        setStops(
+            result.stops.map((stop, index) => ({
+                ...stop,
+                position_in_itinerary: index + 1,
+            }))
+        );
+
+        setRouteMessage(
+            `Route improved! ${result.originalDistanceKm.toFixed(1)} km → ${result.optimizedDistanceKm.toFixed(1)} km`
+        );
+    };
+
     // Recover an unfinished draft when the page loads
     useEffect(() => {
         const draft = getGuestDraft();
@@ -201,6 +244,7 @@ export default function CreatePage() {
             setTitle(draft.title);
             setDescription(draft.description);
             setStops(draft.stops);
+            setLegModes(draft.legModes ?? {});
         }
 
         setIsLoaded(true);
@@ -214,38 +258,12 @@ export default function CreatePage() {
             title,
             description,
             stops,
+            legModes,
             updated_at: new Date().toISOString(),
         });
 
         setSaveStatus("Saved on this device");
-    }, [title, description, stops, isLoaded]);
-
-    // Recover an unfinished draft when the page loads
-    useEffect(() => {
-        const draft = getGuestDraft();
-
-        if (draft) {
-            setTitle(draft.title);
-            setDescription(draft.description);
-            setStops(draft.stops);
-        }
-
-        setIsLoaded(true);
-    }, []);
-
-    // Automatically save whenever the user makes changes
-    useEffect(() => {
-        if (!isLoaded) return;
-
-        saveGuestDraft({
-            title,
-            description,
-            stops,
-            updated_at: new Date().toISOString(),
-        });
-
-        setSaveStatus("Saved on this device");
-    }, [title, description, stops, isLoaded]);
+    }, [title, description, stops, legModes, isLoaded]);
 
     const removeStop = (id: string) => {
         setStops((prevStops) =>
@@ -376,8 +394,8 @@ export default function CreatePage() {
                             </span>
                         </div>
 
-                        {/* Interactive map */}
-                        <div className="mb-6">
+                                                {/* Interactive map */}
+                        <div className="mb-4">
                             <ItineraryMap
                                 stops={stops.map((stop) => ({
                                     id: stop.id,
@@ -385,8 +403,42 @@ export default function CreatePage() {
                                     latitude: stop.latitude,
                                     longitude: stop.longitude,
                                 }))}
+                                legModes={legModes}
                                 onAddStop={addMapStop}
                             />
+                        </div>
+
+                        {/* Route optimization */}
+                        <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[#F7F5EF] p-4">
+                            <div>
+                                <h3 className="font-semibold text-[#34483B]">
+                                    Plan your route
+                                </h3>
+                                <p className="mt-1 text-sm text-[#929187]">
+                                    Find a more efficient order for your stops.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={handleOptimizeRoute}
+                                disabled={
+                                    stops.filter(
+                                        (stop) =>
+                                            stop.latitude !== null &&
+                                            stop.longitude !== null
+                                    ).length < 3
+                                }
+                                className="rounded-lg bg-[#34483B] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#293A30] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                                Optimize Route
+                            </button>
+
+                            {routeMessage && (
+                                <p className="w-full text-sm text-[#71816E]">
+                                    {routeMessage}
+                                </p>
+                            )}
                         </div>
 
                         {/* Individual stop cards */}
@@ -592,6 +644,43 @@ export default function CreatePage() {
                                             />
                                         </div>
                                     </div>
+                                    {/* Transportation to next stop */}
+                                    {index < stops.length - 1 && (
+                                        <div className="border-t border-[#E8E3D8] pt-4">
+                                            <label
+                                                htmlFor={`travel-mode-${stop.id}`}
+                                                className="mb-2 block text-sm font-semibold text-[#34483B]"
+                                            >
+                                                Getting to {stops[index + 1].name || `Stop ${index + 2}`}
+                                            </label>
+
+                                            <select
+                                                id={`travel-mode-${stop.id}`}
+                                                value={
+                                                    legModes[getLegKey(stop.id, stops[index + 1].id)]
+                                                    ?? "automatic"
+                                                }
+                                                onChange={(event) => {
+                                                    const legKey = getLegKey(
+                                                        stop.id,
+                                                        stops[index + 1].id
+                                                    );
+
+                                                    setLegModes((previous) => ({
+                                                        ...previous,
+                                                        [legKey]: event.target.value as TravelMode,
+                                                    }));
+                                                }}
+                                                className="w-full rounded-lg border border-[#E8E3D8] bg-white px-4 py-3 text-sm text-[#34483B]"
+                                            >
+                                                <option value="automatic">Automatic</option>
+                                                <option value="walking">Walking</option>
+                                                <option value="driving">Driving</option>
+                                                <option value="cycling">Cycling</option>
+                                                <option value="transit">Public transit</option>
+                                            </select>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
