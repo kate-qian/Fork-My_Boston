@@ -59,7 +59,7 @@ async function getUserCreatedItineraries(
         `
     SELECT
       key,
-      title,
+      name AS title,
       description,
       location,
       stops

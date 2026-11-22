@@ -12,7 +12,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user_logged_in, setUserLoggedIn] = useState<string>(0);
+    const [user_logged_in, setUserLoggedIn] = useState<string>("0");
 
     // Restore saved user ID on page load/refresh
     useEffect(() => {
