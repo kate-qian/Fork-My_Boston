@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import {
-    Map as MapLibreMap,
+    Map as MapLibreGL,
     Marker,
     Popup,
     NavigationControl,
@@ -218,7 +218,7 @@ function createBusinessPopup(
 
 export default function ItineraryMap({stops, onAddStop}: ItineraryMapProps) {
     const mapContainer = useRef<HTMLDivElement | null>(null);
-    const mapRef = useRef<MapLibreMap | null>(null);
+    const mapRef = useRef<MapLibreGL | null>(null);
     const markersRef = useRef<Marker[]>([]);
     const stopsRef = useRef(stops);
     const onAddStopRef = useRef(onAddStop);

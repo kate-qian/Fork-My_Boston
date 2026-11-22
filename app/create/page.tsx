@@ -147,6 +147,30 @@ export default function CreatePage() {
         }]);
     };
 
+    const addMapStop = (place: {
+        name: string;
+        category: string;
+        latitude: number;
+        longitude: number;
+    }) => {
+        setStops((prevStops) => [
+            ...prevStops,
+            {
+                id: crypto.randomUUID(),
+                itinerary_id: "",
+                name: place.name,
+                description: "",
+                location: "Boston, MA",
+                latitude: place.latitude,
+                longitude: place.longitude,
+                place_id: null,
+                time: "",
+                position_in_itinerary: prevStops.length + 1,
+                input_mode: "search",
+            },
+        ]);
+    };
+
     // Recover an unfinished draft when the page loads
     useEffect(() => {
         const draft = getGuestDraft();
@@ -339,6 +363,7 @@ export default function CreatePage() {
                                     latitude: stop.latitude,
                                     longitude: stop.longitude,
                                 }))}
+                                onAddStop={addMapStop}
                             />
                         </div>
 
