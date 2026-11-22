@@ -9,7 +9,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    //const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { login } = useAuth();
     const router = useRouter();
@@ -17,7 +17,7 @@ export default function LoginPage() {
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
         setErrorMessage(null);
-        setIsSubmitting(true);
+        //setIsSubmitting(true);
 
         try {
             const response = await fetch("/api/login", {
@@ -41,9 +41,10 @@ export default function LoginPage() {
             setErrorMessage(
                 err instanceof Error ? err.message : "Something went wrong."
             );
-        } finally {
-            setIsSubmitting(false);
         }
+        // finally {
+        //     setIsSubmitting(false);
+        // }
     }
 
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "../app/context/AuthContext";
+import Link from "next/link";
 
 export default function NavBar() {
     //const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,7 +55,7 @@ export default function NavBar() {
                             className="flex items-center gap-2"
                         >
                             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E8D4C6] font-semibold text-[#A85D3F]">
-                                A
+                                {user_logged_in ? user_logged_in.trim().charAt(0).toUpperCase() : "A"}
                             </div>
 
                             <span className="text-sm text-[#77796F]">⌄</span>
@@ -62,26 +63,38 @@ export default function NavBar() {
 
                         {menuOpen && (
                             <div className="absolute right-0 z-50 mt-3 w-48 rounded-xl border border-[#E8E3D8] bg-white py-2 shadow-lg">
-                                <a
+                                {/* <a
                                     href="/profile"
                                     className="block px-4 py-2 text-sm hover:bg-[#F7F5EF]"
                                 >
                                     My Profile
-                                </a>
+                                </a> */}
 
-                                <a
+                                <Link
+                                    href={`/my_itineraries/${user_logged_in}`}
+                                    className="block px-4 py-2 text-sm hover:bg-[#F7F5EF]"
+                                >
+                                    My Itineraries
+                                </Link>
+                                {/* <a
                                     href="/my-itineraries"
                                     className="block px-4 py-2 text-sm hover:bg-[#F7F5EF]"
                                 >
                                     My Itineraries
-                                </a>
+                                </a> */}
 
-                                <a
+                                <Link
+                                    href={`/pinned/${user_logged_in}`}
+                                    className="block px-4 py-2 text-sm hover:bg-[#F7F5EF]"
+                                >
+                                    Pinned Itineraries
+                                </Link>
+                                {/* <a
                                     href="/saved"
                                     className="block px-4 py-2 text-sm hover:bg-[#F7F5EF]"
                                 >
                                     Saved Itineraries
-                                </a>
+                                </a> */}
 
                                 <div className="my-2 border-t border-[#E8E3D8]" />
 

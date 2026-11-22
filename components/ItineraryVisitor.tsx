@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export type ItineraryCardData = {
     key: string;
@@ -84,12 +85,12 @@ export default function ItineraryVisitor({
                                     {itinerary.stops.join(" · ")}
                                 </p>
 
-                                <a
+                                <Link
                                     href={`/itineraries/${itinerary.key}`}
                                     className="mt-5 inline-block text-sm font-semibold text-[#C97955] hover:text-[#A85D3F]"
                                 >
                                     View itinerary →
-                                </a>
+                                </Link>
                             </div>
                         ))}
                     </div>
