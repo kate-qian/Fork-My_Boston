@@ -2,17 +2,50 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    function handleLogin(e: React.FormEvent) {
+    const { login } = useAuth();
+    const router = useRouter();
+
+    async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
+        setErrorMessage(null);
+        setIsSubmitting(true);
 
-        // Authentication will be connected later.
-        alert("Login isn't connected yet!");
+        try {
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Invalid login credentials.");
+            }
+
+            // Updates global user_logged_in state, localStorage, and cookie
+            login(data.user_id);
+
+            // Redirect to homepage after logging in
+            router.push("/");
+        } catch (err) {
+            setErrorMessage(
+                err instanceof Error ? err.message : "Something went wrong."
+            );
+        } finally {
+            setIsSubmitting(false);
+        }
     }
+
 
     return (
         <main className="flex min-h-screen items-center justify-center bg-[#F7F5EF] px-6 py-12 text-[#292D27]">
@@ -28,6 +61,12 @@ export default function LoginPage() {
                 <p className="mt-3 text-sm text-[#77796F]">
                     Log in to access your saved Boston adventures.
                 </p>
+
+                {errorMessage && (
+                    <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {errorMessage}
+                    </div>
+                )}
 
                 <form onSubmit={handleLogin} className="mt-8 space-y-5">
                     <div>
