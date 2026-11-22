@@ -56,7 +56,6 @@ export default function CreatePage() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [saveStatus, setSaveStatus] = useState("");
 
-    // Recover an unfinished draft when the page loads
     useEffect(() => {
         const draft = getGuestDraft();
 
@@ -69,7 +68,6 @@ export default function CreatePage() {
         setIsLoaded(true);
     }, []);
 
-    // Automatically save whenever the user makes changes
     useEffect(() => {
         if (!isLoaded) return;
 
@@ -97,6 +95,53 @@ export default function CreatePage() {
                 longitude: null,
                 place_id: null,
             } : {})} : stop));
+    };
+
+    const addMapStop = (place: {name: string; category: string; latitude: number; longitude: number}) => {
+        setStops((prevStops) => {
+            const alreadyExists = prevStops.some((stop) =>
+                stop.name.trim().toLowerCase() === place.name.trim().toLowerCase() &&
+                stop.latitude !== null &&
+                stop.longitude !== null &&
+                Math.abs(stop.latitude - place.latitude) < 0.0005 &&
+                Math.abs(stop.longitude - place.longitude) < 0.0005
+            );
+
+            if (alreadyExists) return prevStops;
+
+            const emptyIndex = prevStops.findIndex(
+                (stop) => !stop.name.trim()
+            );
+
+            const newStop = {
+                name: place.name,
+                location: "Boston, MA",
+                latitude: place.latitude,
+                longitude: place.longitude,
+                place_id: null,
+                description: "",
+                time: "",
+                input_mode: "manual" as const,
+            };
+
+            if (emptyIndex !== -1) {
+                return prevStops.map((stop, index) =>
+                    index === emptyIndex
+                        ? { ...stop, ...newStop }
+                        : stop
+                );
+            }
+
+            return [
+                ...prevStops,
+                {
+                    id: crypto.randomUUID(),
+                    itinerary_id: "",
+                    ...newStop,
+                    position_in_itinerary: prevStops.length + 1,
+                },
+            ];
+        });
     };
 
     const updateStopMode = (id: string, mode: "search" | "manual") => {
@@ -239,12 +284,13 @@ export default function CreatePage() {
                     {/* Interactive map */}
                     <div className="mb-6">
                         <ItineraryMap
-                        stops={stops.map((stop) => ({
-                            id: stop.id,
-                            name: stop.name,
-                            latitude: stop.latitude,
-                            longitude: stop.longitude,
-                        }))}
+                            stops={stops.map((stop) => ({
+                                id: stop.id,
+                                name: stop.name,
+                                latitude: stop.latitude,
+                                longitude: stop.longitude,
+                            }))}
+                            onAddStop={addMapStop}
                         />
                     </div>
 

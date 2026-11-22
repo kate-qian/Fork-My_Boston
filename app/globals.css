@@ -13,3 +13,24 @@ body {
     color: var(--foreground);
     font-family: Arial, sans-serif;
 }
+
+.business-popup .maplibregl-popup-content {
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.business-popup .maplibregl-popup-close-button {
+    padding: 4px 8px;
+    font-size: 16px;
+}
+
+.business-popup .maplibregl-popup-close-button:hover {
+    background: transparent;
+    color: #C97955;
+}
+
+.business-popup .maplibregl-popup-tip {
+    border-top-color: white;
+    border-bottom-color: white;
+}
